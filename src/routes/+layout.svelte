@@ -34,7 +34,7 @@
 </div>
 
 <style scoped>
-	:global(h1, h2) {
+	/* :global(h1, h2) {
 		--at-apply: text-5xl text-[#333] font-bold;
-	}
+	} */
 </style>

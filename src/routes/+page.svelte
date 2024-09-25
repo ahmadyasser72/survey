@@ -82,17 +82,55 @@
             </div>
             <div class="bg-gray-100 p-5 mb-10">
                 <h1 class="font-bold text-2xl mb-2">nama survey atau poling</h1>
-                <p class="my-3">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
+                <p class="my-3 text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
                     beatae possimus recusandae illum rem. Minima sequi voluptas repudiandae id? Quae, facere quam suscipit sed,
                     aperiam sapiente pariatur soluta </p>
                 <button class="text-white font-semibold bg-blue-600 hover:bg-blue-800 p-2 my-1 rounded">Lakukan Poling</button>
             </div>
             <div class="bg-gray-100 p-5 mb-10">
                 <h1 class="font-bold text-2xl mb-2">nama survey atau poling</h1>
-                <p class="my-3">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
+                <p class="my-3 text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
                     beatae possimus recusandae illum rem. Minima sequi voluptas repudiandae id? Quae, facere quam suscipit sed,
                     aperiam sapiente pariatur soluta </p>
                 <button class="text-white font-semibold bg-blue-600 hover:bg-blue-800 p-2 my-1 rounded">Lakukan Poling</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="bg-gray-100">
+        <div class="container mx-auto py-12">
+            <div class="max-w-lg mx-auto px-4">
+                <h2 class="text-3xl font-semibold text-gray-900 mb-4">
+                    How can we help you
+                </h2>
+                <p class="text-gray-700 mb-8">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sagittis velit
+                    eget nisi lobortis dignissim.
+                </p>
+               <form action="" method="post" class="bg-white rounded-lg px-6 py-8 shadow-md">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2" for="name">Name</label>
+                        <input
+                            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="name" type="text" placeholder="Enter your name">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-bold mb-2" for="message">Message</label>
+                        <textarea
+                            class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            id="message" rows="6" placeholder="Enter your message"></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                            type="button">
+                            Send
+                        </button>
+                    </div>
+        
+                </form>
             </div>
         </div>
     </div>
