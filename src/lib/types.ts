@@ -5,3 +5,7 @@ export interface Voting {
 	daftar_pilihan: string[];
 	daftar_gambar_pilihan: string[];
 }
+
+export interface VotingResult {
+	index_pilihan: number;
+}
