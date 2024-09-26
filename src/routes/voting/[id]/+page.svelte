@@ -19,7 +19,8 @@
 
 	let voteKey: string;
 	onMount(() => {
-		voteKey = `vote-${document.URL}`;
+		const url = new URL(document.URL);
+		voteKey = `vote-${url.pathname.split('/').at(-1)}`;
 	});
 
 	const handleSubmit: SubmitFunction = async ({ cancel }) => {
