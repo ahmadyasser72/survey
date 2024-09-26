@@ -41,6 +41,9 @@
 			}
 		};
 	};
+
+	const doShare = () =>
+		navigator.share({ title: `(polling) ${data.nama}`, text: data.pertanyaan, url: document.URL });
 </script>
 
 <div class="flex flex-col justify-center items-center bg-gray-100 min-h-screen">
@@ -101,15 +104,18 @@
 
 		<ChartHasilPolling data={data.hasil} />
 
-		<div class="w-2/3 px-4">
-			<div class="mt-4 flex space-x-2">
+		<div class="min-w-40% p-4">
+			<div class="flex space-x-2">
 				<button class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700">
 					Refresh
 				</button>
 				<a href="/voting" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
 					Lihat polling lain
 				</a>
-				<button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+				<button
+					on:click={doShare}
+					class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+				>
 					Bagikan
 				</button>
 			</div>
