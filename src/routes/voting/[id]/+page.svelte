@@ -1,17 +1,51 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import { applyAction, enhance } from '$app/forms';
+	import { onMount } from 'svelte';
+	import type { PageData, SubmitFunction } from './$types';
 
 	export let data: PageData;
+
+	let voteKey: string;
+	onMount(() => {
+		voteKey = `vote-${document.URL}`;
+	});
+
+	const handleSubmit: SubmitFunction = async ({ cancel }) => {
+		if (localStorage.getItem(voteKey) === '1') {
+			alert('Anda sudah pernah vote disini!');
+			cancel();
+		}
+
+		return ({ result, update }) => {
+			if (result.type === 'success') {
+				applyAction(result);
+				update();
+				localStorage.setItem(voteKey, '1');
+				alert(`Voting untuk "${result.data?.pilihan}" berhasil!`);
+			}
+		};
+	};
 </script>
 
 <div class="flex flex-col justify-center items-center bg-gray-100 min-h-screen">
 	<h1 class="text-center text-3xl font-bold mb-8">{data.nama}</h1>
 
-	<form class="flex flex-col items-center">
+	<form
+		class="flex flex-col items-center"
+		method="POST"
+		enctype="multipart/form-data"
+		use:enhance={handleSubmit}
+	>
 		<div class="flex flex-wrap justify-center gap-6">
 			{#each Object.entries(data.pilihan) as [pilihan, linkGambar], idx}
 				<label for="option{idx}" class="card-option relative cursor-pointer">
-					<input type="radio" id="option{idx}" name="vote" value={pilihan} class="hidden peer" />
+					<input
+						type="radio"
+						id="option{idx}"
+						name="index_pilihan"
+						value={idx}
+						class="hidden peer"
+					/>
 					<div
 						class="bg-white rounded-lg shadow-lg overflow-hidden w-64 h-80 p-4 transition-transform duration-300 transform peer-checked:scale-105 peer-checked:border-4 peer-checked:border-blue-500"
 					>
