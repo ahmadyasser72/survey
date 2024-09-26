@@ -115,7 +115,7 @@
 			</h2>
 
 			<div
-				class="flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-80% md:w-40ch min-h-64 px-8 py-6"
+				class="flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-80% md:w-40ch px-8 py-6"
 			>
 				<ChartHasilPolling data={data.hasil} />
 			</div>
