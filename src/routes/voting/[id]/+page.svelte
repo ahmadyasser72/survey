@@ -1,9 +1,21 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import type { PageData, SubmitFunction } from './$types';
+	import ChartHasilPolling from './ChartHasilPolling.svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	export let data: PageData;
+
+	let hasilPollingHeading: HTMLHeadingElement;
+	let showResult = false;
+	const toggleShowResult = async (value = !showResult) => {
+		showResult = value;
+		if (showResult) {
+			await tick();
+			window.scrollTo({ behavior: 'smooth', top: hasilPollingHeading.offsetTop });
+		}
+	};
 
 	let voteKey: string;
 	onMount(() => {
@@ -16,12 +28,15 @@
 			cancel();
 		}
 
-		return ({ result, update }) => {
+		return async ({ result, update }) => {
 			if (result.type === 'success') {
-				applyAction(result);
-				update();
+				await applyAction(result);
+				await invalidateAll();
 				localStorage.setItem(voteKey, '1');
 				alert(`Voting untuk "${result.data?.pilihan}" berhasil!`);
+
+				await update({ invalidateAll: false });
+				await toggleShowResult(true);
 			}
 		};
 	};
@@ -30,8 +45,12 @@
 <div class="flex flex-col justify-center items-center bg-gray-100 min-h-screen">
 	<h1 class="text-center text-3xl font-bold mb-8">{data.nama}</h1>
 
+	<div class="bg-white rounded-lg shadow-lg min-w-60ch p-4 mb-8">
+		<p>{data.pertanyaan}</p>
+	</div>
+
 	<form
-		class="flex flex-col items-center"
+		class="flex flex-col items-center min-w-40%"
 		method="POST"
 		enctype="multipart/form-data"
 		use:enhance={handleSubmit}
@@ -60,63 +79,39 @@
 				</label>
 			{/each}
 		</div>
-		<div class="mt-6">
+		<div class="relative mt-6 w-full flex justify-center">
 			<button type="submit" class="bg-blue-500! text-white px-6 py-3 rounded-lg hover:bg-blue-700!">
-				Submit Vote
+				Vote
 			</button>
+			<button
+				on:click|preventDefault={() => toggleShowResult()}
+				class="absolute right-0 bottom-0 hover:text-[#333] underline"
+				>{showResult ? 'sembunyikan' : 'tampilkan'} hasil</button
+			>
 		</div>
 	</form>
 </div>
 
-<div class="flex w-full bg-white border border-gray-300 shadow-md rounded-lg p-5">
-	<div class="w-1/3 flex justify-center items-center">
-		<div class="w-24 h-24 rounded-full bg-cyan-300 text-white flex justify-center items-center">
-			<span class="text-lg font-bold">100%</span>
+{#if showResult}
+	<div class="flex flex-col justify-center items-center bg-gray-100 min-h-screen">
+		<h2 bind:this={hasilPollingHeading} class="text-center text-3xl font-bold mb-8">
+			Hasil polling
+		</h2>
+
+		<ChartHasilPolling data={data.hasil} />
+
+		<div class="w-2/3 px-4">
+			<div class="mt-4 flex space-x-2">
+				<button class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700">
+					Refresh
+				</button>
+				<a href="/voting" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+					Lihat polling lain
+				</a>
+				<button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+					Bagikan
+				</button>
+			</div>
 		</div>
 	</div>
-
-	<div class="w-2/3 px-4">
-		<div class="mb-2 flex items-center">
-			<span class="font-bold">pilihan 1</span>
-			<div class="w-full h-4 ml-2 bg-gray-300 rounded-full overflow-hidden">
-				<div class="h-full bg-cyan-300 progress-bar" style="width: 100%;"></div>
-			</div>
-			<span class="ml-2">pilihan 2</span>
-		</div>
-
-		<div class="mb-2 flex items-center">
-			<span class="font-bold">pilihan 2</span>
-			<div class="w-full h-4 ml-2 bg-gray-300 rounded-full overflow-hidden">
-				<div class="h-full bg-gray-300" style="width: 0%;"></div>
-			</div>
-			<span class="ml-2">0 Suara</span>
-		</div>
-
-		<div class="mb-2 flex items-center">
-			<span class="font-bold">pilihan 3</span>
-			<div class="w-full h-4 ml-2 bg-gray-300 rounded-full overflow-hidden">
-				<div class="h-full bg-gray-300" style="width: 0%;"></div>
-			</div>
-			<span class="ml-2">0 Suara</span>
-		</div>
-
-		<div class="mt-4 font-bold">Total: 1 suara</div>
-
-		<div class="mt-4 flex space-x-2">
-			<button class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700">
-				Refresh
-			</button>
-			<button class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-				Kembali Ke Polling
-			</button>
-			<button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-				Bagikan
-			</button>
-		</div>
-
-		<div class="mt-4 bg-gray-100 px-4 py-2 rounded-lg flex items-center justify-between">
-			<input type="text" readonly value="https://link" class="bg-transparent w-full outline-none" />
-			<button class="text-cyan-500">Copy</button>
-		</div>
-	</div>
-</div>
+{/if}
