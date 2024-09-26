@@ -106,7 +106,10 @@
 
 		<div class="min-w-40% p-4">
 			<div class="flex space-x-2">
-				<button class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700">
+				<button
+					on:click={() => invalidateAll()}
+					class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700"
+				>
 					Refresh
 				</button>
 				<a href="/voting" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
