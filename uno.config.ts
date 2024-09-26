@@ -6,6 +6,6 @@ export default defineConfig({
 	presets: [presetUno()],
 	transformers: [transformerDirectives()],
 	shortcuts: {
-		'g-button': 'px-4 py-2 rounded-lg border bg-[#222] text-white font-semibold'
+		'g-button': 'px-4 py-2 rounded-lg border bg-[#222]! text-white! font-semibold'
 	}
 });
