@@ -4,21 +4,21 @@
 	export let data: PageData;
 </script>
 
-<div class="mx-auto w-full max-w-7xl">
+<div class="mx-auto w-80% md:w-full py-4 md:px-8 lg:px-32">
 	<div class="text-center justify-center p-4">
 		<h2>Poling / Survey</h2>
 	</div>
-	<div class="py-4">
+	<div class="py-4 grid md:grid-cols-2 gap-4">
 		{#each data.value as { nama, pertanyaan, route }}
 			<a
 				href="/voting/{route}"
-				class="flex gap-3 mt-4 bg-white border border-gray-300 rounded-xl overflow-hidden items-center justify-start"
+				class="flex gap-4 bg-white border border-gray-300 rounded-xl overflow-hidden items-center justify-start"
 			>
 				<div class="relative w-32 h-32 flex-shrink-0">
 					<img
 						class="absolute left-0 top-0 w-full h-full object-cover object-center transition duration-50"
 						loading="lazy"
-						src="/pilihan.png"
+						src="/img/pilihan.png"
 					/>
 				</div>
 
