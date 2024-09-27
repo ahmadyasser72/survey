@@ -9,12 +9,14 @@
 	let imageTexts: string[] = [];
 	let imageInput: HTMLInputElement;
 	const addImage = () => {
-		const image = imageInput.files?.[0];
-		if (image !== undefined) {
-			imageTexts.push('');
-			images.push(image);
-			base64Images.push(URL.createObjectURL(image));
-			base64Images = base64Images;
+		const files = imageInput.files ?? undefined;
+		if (files !== undefined) {
+			for (const image of files) {
+				imageTexts.push('');
+				images.push(image);
+				base64Images.push(URL.createObjectURL(image));
+				base64Images = base64Images;
+			}
 		}
 
 		imageInput.value = '';
@@ -92,6 +94,7 @@
 					name="gambar"
 					id="gambar"
 					accept="image/*"
+					multiple
 				/>
 			</div>
 			<button type="submit" class="g-button">Submit</button>
