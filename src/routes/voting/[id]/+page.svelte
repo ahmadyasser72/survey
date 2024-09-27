@@ -24,9 +24,12 @@
 		voteKey = `vote-${url.pathname.split('/').at(-1)}`;
 	});
 
-	const handleSubmit: SubmitFunction = async ({ cancel }) => {
+	const handleSubmit: SubmitFunction = async ({ cancel, formData }) => {
 		if (localStorage.getItem(voteKey) === '1') {
 			alert('Anda sudah pernah vote disini!');
+			cancel();
+		} else if (formData.get('index_pilihan') == null) {
+			alert('Anda belum memilih pilihan!');
 			cancel();
 		}
 
