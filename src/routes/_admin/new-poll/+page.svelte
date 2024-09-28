@@ -39,9 +39,7 @@
 </script>
 
 <div>
-	<div class="pt-4 pb-6 border-b">
-		<h1 class="text-center">Polling baru</h1>
-	</div>
+	<h1 class="text-center text-3xl font-bold mb-8 pt-6">Polling baru</h1>
 	<form
 		class="flex flex-col items-center my-8"
 		method="post"
@@ -56,7 +54,7 @@
 			<div class="flex flex-col">
 				<label for="nama_route">Custom link</label>
 				<div class="flex items-center mt-1">
-					<span class="border h-8 rounded-l-sm px-1 w-25% text-center">/vote/</span>
+					<span class="border h-8 rounded-l-sm px-1 min-w-30% text-center">/polling/</span>
 					<input
 						class="border h-8 rounded-r-sm px-1 w-75%"
 						type="text"
