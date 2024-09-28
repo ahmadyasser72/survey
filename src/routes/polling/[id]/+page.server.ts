@@ -1,13 +1,13 @@
 import PocketBase, { ClientResponseError, type RecordModel } from 'pocketbase';
 import type { Actions, PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import type { Voting, VotingResult } from '$lib/types';
+import type { Poll, PollResult } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	try {
-		const record = await getVotingRecord(locals.pb, params.id);
-		const { id: votingId, nama, pertanyaan, daftar_pilihan, daftar_gambar_pilihan } = record;
-		const hasil = await getVotingResults(locals.pb, votingId);
+		const record = await getPoll(locals.pb, params.id);
+		const { id: pollId, nama, pertanyaan, daftar_pilihan, daftar_gambar_pilihan } = record;
+		const hasil = await getPollResult(locals.pb, pollId);
 
 		return {
 			hasil,
@@ -32,21 +32,21 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 export const actions: Actions = {
 	default: async ({ request, params, locals }) => {
 		const formData = await request.formData();
-		const { id: votingId, daftar_pilihan } = await getVotingRecord(locals.pb, params.id);
-		formData.append('voting', votingId);
+		const { id: pollId, daftar_pilihan } = await getPoll(locals.pb, params.id);
+		formData.append('polling', pollId);
 
-		await locals.pb.collection('hasil_voting').create(formData);
+		await locals.pb.collection('hasil_polling').create(formData);
 		return { pilihan: daftar_pilihan[Number(formData.get('index_pilihan'))] };
 	}
 };
 
-const getVotingRecord = (pb: PocketBase, route: string) =>
-	pb.collection('voting').getFirstListItem<RecordModel & Voting>(`nama_route="${route}"`);
+const getPoll = (pb: PocketBase, route: string) =>
+	pb.collection('polling').getFirstListItem<RecordModel & Poll>(`nama_route="${route}"`);
 
-const getVotingResults = async (pb: PocketBase, id: string) => {
-	const { daftar_pilihan } = await pb.collection('voting').getOne<Voting>(id);
-	const records = await pb.collection('hasil_voting').getFullList<VotingResult>({
-		filter: `voting="${id}"`
+const getPollResult = async (pb: PocketBase, id: string) => {
+	const { daftar_pilihan } = await pb.collection('polling').getOne<Poll>(id);
+	const records = await pb.collection('hasil_polling').getFullList<PollResult>({
+		filter: `polling="${id}"`
 	});
 
 	const voteArray = Array.from({ length: daftar_pilihan.length }, () => 0);

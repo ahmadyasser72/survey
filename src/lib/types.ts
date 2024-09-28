@@ -1,4 +1,4 @@
-export interface Voting {
+export interface Poll {
 	nama: string;
 	nama_route: string;
 	pertanyaan: string;
@@ -6,6 +6,6 @@ export interface Voting {
 	daftar_gambar_pilihan: string[];
 }
 
-export interface VotingResult {
+export interface PollResult {
 	index_pilihan: number;
 }
