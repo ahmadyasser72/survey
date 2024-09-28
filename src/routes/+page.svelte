@@ -28,11 +28,10 @@
     <div class="relative z-20 mx-auto max-w-7xl px-6 lg:px-8">
         <div class="mx-auto max-w-2xl text-center">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                POLING
-                <span class="text-blue-600">KITA</span>
+                POLING<span class="text-blue-600">KU</span>
             </h1>
             <h2 class="mt-6 text-lg leading-8 text-gray-600">
-                Kami tidak memihak pada siapapun, murni dibuat untuk ingin tahu kami bagaimana membuat polling.
+                website poling buatan orang indonesia
             </h2>
             <div class="mt-10 flex items-center justify-center gap-x-6">
                 <a class="isomorphic-link isomorphic-link--internal inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -58,10 +57,10 @@
         <div class="sm:w-1/2 p-5">
             <div class="text">
                 <span class="text-gray-500 border-b-2 border-indigo-600 uppercase">About us</span>
-                <h2 class="my-4 font-bold text-3xl  sm:text-4xl ">Tentang <span class="text-indigo-600">POLING KITA</span>
+                <h2 class="my-4 font-bold text-3xl  sm:text-4xl ">Tentang <span class="text-indigo-600">POLINGKU</span>
                 </h2>
                 <p class="text-gray-700 text-sm">
-                    PolingKita adalah platform yang memudahkan pengumpulan dan analisis data polling. Kami menyediakan alat intuitif untuk membantu organisasi dan individu memahami opini publik dengan cepat dan efisien. Dengan berbagai format polling dan analisis mendalam, kami mendukung pengambilan keputusan berbasis data. Kami berkomitmen pada privasi pengguna dan transparansi, menjadikan setiap suara penting. Bergabunglah dengan PolingKita untuk berkontribusi pada perubahan positif!
+                    POLINGKU adalah platform yang memudahkan pengumpulan dan analisis data polling. Kami menyediakan alat intuitif untuk membantu organisasi dan individu memahami opini publik dengan cepat dan efisien. Dengan berbagai format polling dan analisis mendalam, kami mendukung pengambilan keputusan berbasis data. Kami berkomitmen pada privasi pengguna dan transparansi, menjadikan setiap suara penting. Bergabunglah dengan POLINGKU untuk berkontribusi pada perubahan positif!
                 </p>
             </div>
         </div>
@@ -98,16 +97,15 @@
     </div>
 </section>
 
-<section>
+<section id="saran">
     <div class="bg-gray-100">
         <div class="container mx-auto py-12">
             <div class="max-w-lg mx-auto px-4">
                 <h2 class="text-3xl font-semibold text-gray-900 mb-4">
-                    How can we help you
+                    SARAN
                 </h2>
                 <p class="text-gray-700 mb-8">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sagittis velit
-                    eget nisi lobortis dignissim.
+                    Berikan kami saran untuk membuta website ini lebih baik
                 </p>
                <form action="" method="post" class="bg-white rounded-lg px-6 py-8 shadow-md">
                     <div class="mb-4">

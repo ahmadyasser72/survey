@@ -25,10 +25,10 @@
 	<div class="hidden md:flex md:items-center md:w-auto w-full" id="menu">
 		<nav>
 			<ul class="md:flex items-center justify-between text-base text-gray-700 pt-4 md:pt-0">
-				<li><a class="md:p-4 py-3 px-0 block" href="#">AboutUs</a></li>
+				<li><a class="md:p-4 py-3 px-0 block" href="#about">AboutUs</a></li>
 				<li><a class="md:p-4 py-3 px-0 block" href="/polling">Polling</a></li>
 				<!-- <li><a class="md:p-4 py-3 px-0 block" href="#">Blog</a></li> -->
-				<li><a class="md:p-4 py-3 px-0 block md:mb-0 mb-2" href="#">Saran</a></li>
+				<li><a class="md:p-4 py-3 px-0 block md:mb-0 mb-2" href="#saran">Saran</a></li>
 			</ul>
 		</nav>
 	</div>
