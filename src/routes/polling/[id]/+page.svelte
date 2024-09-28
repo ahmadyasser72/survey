@@ -130,7 +130,7 @@
 				>
 					Refresh
 				</button>
-				<a href="/voting" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+				<a href="/polling" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
 					Lihat polling lain
 				</a>
 				<button

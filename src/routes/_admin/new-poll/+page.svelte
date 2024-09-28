@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SurveyImageInput from '$lib/components/SurveyImageInput.svelte';
+	import PollingImageInput from './PollingImageInput.svelte';
 
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from './$types';
@@ -30,7 +30,7 @@
 			if (result.type === 'success') {
 				update();
 				images = base64Images = imageTexts = [];
-				alert('Voting berhasil dibuat!');
+				alert('Polling berhasil dibuat!');
 			} else if (result.type === 'failure') {
 				alert(result.data?.message);
 			}
@@ -40,7 +40,7 @@
 
 <div>
 	<div class="pt-4 pb-6 border-b">
-		<h1 class="text-center">Survey baru</h1>
+		<h1 class="text-center">Polling baru</h1>
 	</div>
 	<form
 		class="flex flex-col items-center my-8"
@@ -50,7 +50,7 @@
 	>
 		<div class="flex flex-col space-y-4 border rounded-lg px-8 py-6">
 			<div class="flex flex-col">
-				<label for="nama">Nama voting</label>
+				<label for="nama">Nama Polling</label>
 				<input class="border rounded-sm mt-1 px-1" type="text" name="nama" id="nama" required />
 			</div>
 			<div class="flex flex-col">
@@ -71,7 +71,7 @@
 				></textarea>
 			</div>
 			{#each base64Images as image, idx}
-				<SurveyImageInput
+				<PollingImageInput
 					inputId={(idx + 1).toString()}
 					src={image}
 					bind:inputText={imageTexts[idx]}

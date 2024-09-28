@@ -6,12 +6,12 @@
 
 <div class="mx-auto w-80% md:w-full py-4 md:px-8 lg:px-32">
 	<div class="text-center justify-center p-4">
-		<h2>Poling / Survey</h2>
+		<h2>Daftar Polling</h2>
 	</div>
 	<div class="py-4 grid md:grid-cols-2 gap-4">
 		{#each data.value as { nama, pertanyaan, route }}
 			<a
-				href="/voting/{route}"
+				href="/polling/{route}"
 				class="flex gap-4 bg-white border border-gray-300 rounded-xl overflow-hidden items-center justify-start"
 			>
 				<div class="relative w-32 h-32 flex-shrink-0">
