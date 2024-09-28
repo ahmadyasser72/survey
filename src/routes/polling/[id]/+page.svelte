@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
-	import { onMount, tick } from 'svelte';
-	import type { PageData, SubmitFunction } from './$types';
 	import ChartHasilPolling from './ChartHasilPolling.svelte';
+	import PilihanPolling from './PilihanPolling.svelte';
+
+	import { applyAction, enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { fade, fly, slide } from 'svelte/transition';
+	import type { PageData, SubmitFunction } from './$types';
+
+	import { onMount, tick } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
 
-	let hasilPollingHeading: HTMLHeadingElement;
+	let topHeading: HTMLHeadingElement, hasilPollingHeading: HTMLHeadingElement;
 	let showResult = false;
 	const toggleShowResult = async (value = !showResult) => {
 		showResult = value;
-		if (showResult) {
-			await tick();
-			window.scrollTo({ behavior: 'smooth', top: hasilPollingHeading.offsetTop });
-		}
+		await tick();
+		(showResult ? hasilPollingHeading : topHeading).scrollIntoView({ behavior: 'smooth' });
 	};
 
 	let voteKey: string;
@@ -46,19 +47,19 @@
 		};
 	};
 
-	const doShare = () =>
+	const sharePolling = () =>
 		navigator.share({ title: `(polling) ${data.nama}`, text: data.pertanyaan, url: document.URL });
 </script>
 
-<div class="flex flex-col lg:flex-row children:flex-1 bg-gray-100">
+<div class="flex flex-col lg:flex-row bg-gray-100">
 	<section
-		class="transition-transform-500"
-		class:lg:translate-x-20%={showResult}
-		class:lg:translate-x-50%={!showResult}
+		class="flex-grow-2! transition-transform-500"
+		class:lg:translate-x-0={showResult}
+		class:lg:translate-x-25%={!showResult}
 	>
-		<h1 class="text-center text-3xl font-bold mb-8 mt-6">{data.nama}</h1>
+		<h1 bind:this={topHeading}>{data.nama}</h1>
 
-		<div class="bg-white rounded-lg shadow-lg w-80% md:w-60ch p-4 mb-8">
+		<div class="bg-white rounded-lg shadow-lg w-80% md:w-136 p-4 mb-8">
 			<p>{data.pertanyaan}</p>
 		</div>
 
@@ -69,29 +70,8 @@
 			use:enhance={handleSubmit}
 		>
 			<div class="flex flex-wrap justify-center gap-6">
-				{#each Object.entries(data.pilihan) as [pilihan, linkGambar], idx}
-					<label
-						for="option{idx}"
-						class="card-option relative cursor-pointer w-full md:w-64 min-h-64"
-					>
-						<input
-							type="radio"
-							id="option{idx}"
-							name="index_pilihan"
-							value={idx}
-							class="hidden peer"
-						/>
-						<div
-							class="bg-white rounded-lg shadow-lg overflow-hidden px-8 py-6 transition-transform duration-300 transform peer-checked:scale-105 peer-checked:border-4 peer-checked:border-blue-500 mb-2 peer-checked:mb-0"
-						>
-							<img
-								src={linkGambar}
-								alt="Gambar {pilihan}"
-								class="w-full h-40 object-cover rounded-md mb-4"
-							/>
-							<h2 class="text-center text-2xl font-bold text-gray-800">{pilihan}</h2>
-						</div>
-					</label>
+				{#each Object.entries(data.pilihan) as [text, imageSource], idx}
+					<PilihanPolling id={idx.toString()} {imageSource} {text} />
 				{/each}
 			</div>
 			<div class="relative mt-6 w-full md:w-60ch flex flex-col justify-center">
@@ -112,10 +92,8 @@
 	{#if !showResult}
 		<section></section>
 	{:else}
-		<section in:fade={{ delay: 200 }}>
-			<h2 bind:this={hasilPollingHeading} class="text-center text-3xl font-bold mb-8 mt-6">
-				Hasil polling
-			</h2>
+		<section class="-lg:translate-x-20%" in:fade={{ delay: 200 }}>
+			<h2 bind:this={hasilPollingHeading}>Hasil polling</h2>
 
 			<div
 				class="flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-80% md:w-40ch px-8 py-6"
@@ -134,7 +112,7 @@
 					Lihat polling lain
 				</a>
 				<button
-					on:click={doShare}
+					on:click={sharePolling}
 					class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
 				>
 					Bagikan
@@ -146,6 +124,11 @@
 
 <style scoped>
 	section {
-		--at-apply: flex flex-col items-center pb-4 'md:pb-8';
+		--at-apply: flex-1 flex flex-col items-center pb-4 'md:pb-8';
+	}
+
+	section > h1,
+	h2 {
+		--at-apply: text-center text-3xl font-bold mb-8 pt-6;
 	}
 </style>

@@ -9,7 +9,7 @@ export const load: LayoutServerLoad = async ({ request, setHeaders, locals }) =>
 		try {
 			await locals.pb.collection('users').authWithPassword(username, password);
 
-			return { value: { username, password } };
+			return { username, password };
 		} catch (e) {
 			// invalid auth
 		}
