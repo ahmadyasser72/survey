@@ -22,7 +22,12 @@
 		imageInput.value = '';
 	};
 
-	const handleSubmit: SubmitFunction = async ({ formData }) => {
+	const handleSubmit: SubmitFunction = async ({ formData, cancel }) => {
+		if (images.length === 0) {
+			alert('Daftar pilihan masih kosong!');
+			cancel();
+		}
+
 		formData.append('daftar_pilihan', JSON.stringify(imageTexts));
 		for (const image of images) formData.append('daftar_gambar_pilihan', image);
 
