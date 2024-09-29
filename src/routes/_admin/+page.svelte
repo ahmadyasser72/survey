@@ -9,7 +9,7 @@
 
 <div class="flex flex-col items-center space-y-4 mb-8 mt-4">
 	<h1 class="text-xl">Hello @{data.username}</h1>
-	<a href="/_admin/new-poll" class="g-button">Buat polling baru</a>
+	<a href="/_admin/polls/create" class="g-button">Buat polling baru</a>
 </div>
 
 <div class="overflow-x-auto">
@@ -17,7 +17,7 @@
 		<thead>
 			<tr>
 				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-					>Poling</th
+					>Polling</th
 				>
 				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 					>Link</th
@@ -34,7 +34,7 @@
 			</tr>
 		</thead>
 		<tbody class="bg-white divide-y divide-gray-200">
-			{#each data.list as { nama, route, batas_waktu, active }}
+			{#each data.list as { id, nama, route, batas_waktu, active }}
 				<tr>
 					<td class="px-6 py-4 whitespace-nowrap">{nama}</td>
 					<td class="px-6 py-4 whitespace-nowrap"
@@ -52,9 +52,10 @@
 						>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
-						<button
+						<a
+							href="/_admin/polls/update?id={id}"
 							class="px-4 py-2 font-medium text-white bg-blue-600 rounded-md hover:bg-blue-500 focus:outline-none focus:shadow-outline-blue active:bg-blue-600 transition duration-150 ease-in-out"
-							>Edit</button
+							>Edit</a
 						>
 						<button
 							class="ml-2 px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out"
