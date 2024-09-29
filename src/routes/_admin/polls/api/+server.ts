@@ -17,6 +17,18 @@ export const POST: RequestHandler = async ({ request, url, locals }) => {
 	}
 };
 
+export const GET: RequestHandler = async ({ url, locals }) => {
+	if (url.searchParams.get('mode') === 'delete') {
+		const id = url.searchParams.get('id');
+		if (typeof id !== 'string') error(500);
+
+		await locals.collection.polling.delete(id);
+		return json({ message: 'Polling berhasil dihapus!' });
+	}
+
+	error(404);
+};
+
 const create = async (formData: FormData, { collection: { polling } }: App.Locals) => {
 	const namaRoute = formData.get('nama_route') as string;
 	try {

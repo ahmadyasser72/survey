@@ -1,10 +1,24 @@
 <script lang="ts">
+	import { invalidateAll } from '$app/navigation';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 
 	const activeClasses = 'bg-green-100 text-green-800';
 	const endedClasses = 'bg-red-100 text-red-800';
+
+	const deletePoll = async (id: string, name: string) => {
+		if (!confirm(`Hapus polling "${name}"?`)) return;
+
+		const response = await fetch(`/_admin/polls/api?mode=delete&id=${id}`);
+		if (!response.ok) {
+			alert('Gagal menghapus polling!');
+			return;
+		}
+
+		await invalidateAll();
+		alert('Polling berhasil dihapus!');
+	};
 </script>
 
 <div class="flex flex-col items-center space-y-4 mb-8 mt-4">
@@ -58,6 +72,7 @@
 							>Edit</a
 						>
 						<button
+							on:click={() => deletePoll(id, nama)}
 							class="ml-2 px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-500 focus:outline-none focus:shadow-outline-red active:bg-red-600 transition duration-150 ease-in-out"
 							>Delete</button
 						>
