@@ -26,6 +26,10 @@
 		formData.append('daftar_pilihan', JSON.stringify(imageTexts));
 		for (const image of images) formData.append('daftar_gambar_pilihan', image);
 
+		const batasWaktu = formData.get('batas_waktu');
+		if (typeof batasWaktu === 'string' && batasWaktu !== '')
+			formData.set('batas_waktu', new Date(batasWaktu).toISOString());
+
 		return ({ result, update }) => {
 			if (result.type === 'success') {
 				update();
@@ -62,6 +66,16 @@
 						id="nama_route"
 					/>
 				</div>
+			</div>
+			<div class="flex flex-col">
+				<label for="batas_waktu">Batas waktu (optional)</label>
+				<input
+					class="border rounded-sm mt-1 px-2 py-1"
+					type="datetime-local"
+					min={new Date().toISOString().split(':').slice(0, 2).join(':')}
+					name="batas_waktu"
+					id="batas_waktu"
+				/>
 			</div>
 			<div class="flex flex-col">
 				<label for="pertanyaan">Pertanyaan</label>
