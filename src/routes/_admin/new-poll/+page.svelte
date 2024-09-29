@@ -33,7 +33,7 @@
 		return ({ result, update }) => {
 			if (result.type === 'success') {
 				update();
-				images = base64Images = imageTexts = [];
+				images.length = base64Images.length = imageTexts.length = 0;
 				alert('Polling berhasil dibuat!');
 			} else if (result.type === 'failure') {
 				alert(result.data?.message);
