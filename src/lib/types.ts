@@ -10,3 +10,7 @@ export interface Poll {
 export interface PollResult {
 	index_pilihan: number;
 }
+
+export interface PollResultCount {
+	total: number;
+}

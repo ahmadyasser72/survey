@@ -1,4 +1,4 @@
-import type { Poll, PollResult } from '$lib/types';
+import type { Poll, PollResult, PollResultCount } from '$lib/types';
 import type PocketBase, { RecordService, RecordModel } from 'pocketbase';
 
 // See https://kit.svelte.dev/docs/types#app
@@ -11,6 +11,7 @@ declare global {
 			collection: {
 				polling: RecordService<RecordModel & Poll>;
 				hasil_polling: RecordService<RecordModel & PollResult>;
+				jumlah_hasil_polling: RecordService<RecordModel & PollResultCount>;
 			};
 		}
 		// interface PageData {}

@@ -42,8 +42,9 @@
 				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 					>Status</th
 				>
-				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
-					>Total Poling</th
+				<th
+					class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
+					>Jumlah Suara</th
 				>
 				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 					>Action</th
@@ -51,7 +52,7 @@
 			</tr>
 		</thead>
 		<tbody class="bg-white divide-y divide-gray-200">
-			{#each data.list as { id, nama, route, batas_waktu, active }}
+			{#each data.values as { id, nama, route, batas_waktu, active, total }}
 				<tr>
 					<td class="px-6 py-4 whitespace-nowrap">{nama}</td>
 					<td class="px-6 py-4 whitespace-nowrap"
@@ -69,9 +70,7 @@
 						>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap text-center">
-						<span class="">
-							3
-						</span>
+						<span> {total} </span>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<a

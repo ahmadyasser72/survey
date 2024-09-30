@@ -9,7 +9,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.pb = pb;
 	event.locals.collection = {
 		polling: pb.collection('polling'),
-		hasil_polling: pb.collection('hasil_polling')
+		hasil_polling: pb.collection('hasil_polling'),
+		jumlah_hasil_polling: pb.collection('jumlah_hasil_polling')
 	};
 
 	const response = await resolve(event);
