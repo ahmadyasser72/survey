@@ -1,9 +1,9 @@
 <script lang="ts">
-// import type { PageData, ActionData } from './$types';
+import type { PageData, ActionData } from './$types';
 
-// export let data: PageData;
+export let data: PageData;
 
-// export let form: ActionData;
+export let form: ActionData;
 </script>
 
 <section id="hadding"
@@ -71,28 +71,14 @@
     <div class="justify-center space-y-12">
         <h2 class="text-2xl font-bold text-center">Poling Terbaru</h2>
         <!-- isi -->
-        <div class="flex flex-col p-5 lg:px-48 lg:py-11">
-            <div class="bg-gray-100 p-5 mb-10">
-                <h1 class="font-bold text-2xl mb-2">nama survey atau poling</h1>
-                <p class="my-3 text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
-                    beatae possimus recusandae illum rem. Minima sequi voluptas repudiandae id? Quae, facere quam suscipit sed,
-                    aperiam sapiente pariatur soluta </p>
-                <button class="text-white font-semibold bg-blue-600 hover:bg-blue-800 p-2 my-1 rounded">Ikut Poling</button>
+        <div class="flex justify-center gap-10 p-5 lg:px-48 lg:py-11 ">
+            {#each data.value as polling}
+            <div class="bg-gray-100 flex-1 p-5 mb-10 rounded-lg">
+                <h1 class="font-bold text-2xl mb-2">{polling.title}</h1>
+                <p class="my-3 text-sm">{polling.description}</p>
+                <a href="polling/{polling.route}" class="text-white font-semibold bg-blue-600 hover:bg-blue-800 p-2 my-1 rounded justify-end">Ikut Poling</a>
             </div>
-            <div class="bg-gray-100 p-5 mb-10">
-                <h1 class="font-bold text-2xl mb-2">nama survey atau poling</h1>
-                <p class="my-3 text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
-                    beatae possimus recusandae illum rem. Minima sequi voluptas repudiandae id? Quae, facere quam suscipit sed,
-                    aperiam sapiente pariatur soluta </p>
-                <button class="text-white font-semibold bg-blue-600 hover:bg-blue-800 p-2 my-1 rounded">Lakukan Poling</button>
-            </div>
-            <div class="bg-gray-100 p-5 mb-10">
-                <h1 class="font-bold text-2xl mb-2">nama survey atau poling</h1>
-                <p class="my-3 text-sm">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eius eaque a ipsam aliquid omnis,
-                    beatae possimus recusandae illum rem. Minima sequi voluptas repudiandae id? Quae, facere quam suscipit sed,
-                    aperiam sapiente pariatur soluta </p>
-                <button class="text-white font-semibold bg-blue-600 hover:bg-blue-800 p-2 my-1 rounded">Lakukan Poling</button>
-            </div>
+            {/each}            
         </div>
     </div>
 </section>
