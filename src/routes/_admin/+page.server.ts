@@ -1,3 +1,4 @@
+import { isPollActive } from '$lib';
 import type { PageServerLoad } from '../$types';
 
 export const load: PageServerLoad = async ({
@@ -15,7 +16,7 @@ export const load: PageServerLoad = async ({
 					nama,
 					route: nama_route,
 					batas_waktu: batas_waktu === '' ? undefined : new Date(batas_waktu),
-					active: batas_waktu === '' || Date.parse(batas_waktu) > Date.now()
+					active: isPollActive({ batas_waktu })
 				}))
 			)
 		)

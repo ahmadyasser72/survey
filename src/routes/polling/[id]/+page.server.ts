@@ -1,14 +1,17 @@
 import { ClientResponseError } from 'pocketbase';
 import type { Actions, PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
+import { isPollActive } from '$lib';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	try {
 		const record = await getPoll(locals, params.id);
 		const { id: pollId, nama, pertanyaan, daftar_pilihan, daftar_gambar_pilihan } = record;
 		const hasil = await getPollResult(locals, pollId);
+		const active = isPollActive(record);
 
 		return {
+			active,
 			hasil,
 			nama,
 			pertanyaan,

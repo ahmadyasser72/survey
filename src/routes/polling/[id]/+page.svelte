@@ -12,7 +12,7 @@
 	export let data: PageData;
 
 	let topHeading: HTMLHeadingElement, hasilPollingHeading: HTMLHeadingElement;
-	let showResult = false;
+	let showResult = !data.active;
 	const toggleShowResult = async (value = !showResult) => {
 		showResult = value;
 		await tick();
@@ -69,20 +69,22 @@
 			enctype="multipart/form-data"
 			use:enhance={handleSubmit}
 		>
-			<div class="flex flex-wrap justify-center gap-6">
+			<div class="flex flex-wrap justify-center gap-6 pointer-events-none">
 				{#each Object.entries(data.pilihan) as [text, imageSource], idx}
 					<PilihanPolling id={idx.toString()} {imageSource} {text} />
 				{/each}
 			</div>
 			<div class="relative mt-6 w-full md:w-60ch flex flex-col justify-center">
-				<div class="flex justify-center">
-					<button class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-						Vote
-					</button>
-				</div>
+				{#if data.active}
+					<div class="flex justify-center">
+						<button class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+							Vote
+						</button>
+					</div>
+				{/if}
 				<button
 					on:click|preventDefault={() => toggleShowResult()}
-					class="md:absolute mt-1 md:mt-0 self-end right-0 bottom-0 hover:text-[#333] underline"
+					class="md:absolute mt-1 md:mt-0 right-0 bottom-0 hover:text-[#333] underline"
 					>{showResult ? 'sembunyikan' : 'tampilkan'} hasil</button
 				>
 			</div>
