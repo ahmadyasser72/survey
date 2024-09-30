@@ -99,6 +99,7 @@
 						name="nama_route"
 						id="nama_route"
 						value={prefilled.nama_route}
+						required
 					/>
 				</div>
 			</div>
