@@ -42,6 +42,9 @@
 				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 					>Status</th
 				>
+				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center"
+					>Total Poling</th
+				>
 				<th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
 					>Action</th
 				>
@@ -64,6 +67,11 @@
 								: endedClasses} px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
 							>{active ? 'Active' : 'Ended'}</span
 						>
+					</td>
+					<td class="px-6 py-4 whitespace-nowrap text-center">
+						<span class="">
+							3
+						</span>
 					</td>
 					<td class="px-6 py-4 whitespace-nowrap">
 						<a
