@@ -4,6 +4,7 @@
 
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
+	import { getProgressBar } from '$lib/stores';
 	import type { PageData, SubmitFunction } from './$types';
 
 	import { onMount, tick } from 'svelte';
@@ -23,15 +24,23 @@
 	onMount(() => {
 		const url = new URL(document.URL);
 		voteKey = `vote-${url.pathname.split('/').at(-1)}`;
+
+		if (!data.active) tick().then(() => hasilPollingHeading.scrollIntoView({ behavior: 'smooth' }));
 	});
 
+	let loading = false;
 	const handleSubmit: SubmitFunction = async ({ cancel, formData }) => {
+		const progressbar = getProgressBar();
+
 		if (localStorage.getItem(voteKey) === '1') {
 			alert('Anda sudah pernah vote disini!');
 			cancel();
 		} else if (formData.get('index_pilihan') == null) {
 			alert('Anda belum memilih pilihan!');
 			cancel();
+		} else {
+			loading = true;
+			progressbar.start();
 		}
 
 		return async ({ result, update }) => {
@@ -44,7 +53,20 @@
 				await update({ invalidateAll: false });
 				await toggleShowResult(true);
 			}
+
+			loading = false;
+			progressbar.complete();
 		};
+	};
+
+	let loadingRefresh = false;
+	const refreshHasilPolling = async () => {
+		const progressbar = getProgressBar();
+		loadingRefresh = true;
+		progressbar.start();
+		await invalidateAll();
+		progressbar.complete();
+		loadingRefresh = false;
 	};
 
 	const sharePolling = () =>
@@ -69,7 +91,7 @@
 			enctype="multipart/form-data"
 			use:enhance={handleSubmit}
 		>
-			<div class="flex flex-wrap justify-center gap-6 pointer-events-none">
+			<div class:pointer-events-none={!data.active} class="flex flex-wrap justify-center gap-6">
 				{#each Object.entries(data.pilihan) as [text, imageSource], idx}
 					<PilihanPolling id={idx.toString()} {imageSource} {text} />
 				{/each}
@@ -77,7 +99,10 @@
 			<div class="relative mt-6 w-full md:w-60ch flex flex-col justify-center">
 				{#if data.active}
 					<div class="flex justify-center">
-						<button class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+						<button
+							disabled={loading}
+							class="disabled:loading bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-blue-700"
+						>
 							Vote
 						</button>
 					</div>
@@ -105,8 +130,9 @@
 
 			<div class="flex flex-col md:flex-row gap-2 mt-6">
 				<button
-					on:click={() => invalidateAll()}
-					class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700"
+					disabled={loadingRefresh}
+					on:click={refreshHasilPolling}
+					class="disabled:loading bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 disabled:bg-cyan-700"
 				>
 					Refresh
 				</button>

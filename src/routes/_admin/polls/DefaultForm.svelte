@@ -1,10 +1,10 @@
 <script lang="ts">
 	import PollingImageChoice from './PollingImageChoice.svelte';
 
-	import type { Poll } from '$lib/types';
-
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { getProgressBar } from '$lib/stores';
+	import type { Poll } from '$lib/types';
 
 	export let mode: 'create' | 'update';
 	export let prefilled: Poll & { id?: string } = {
@@ -37,10 +37,16 @@
 		imageInput.value = '';
 	};
 
+	let loading = false;
 	const handleSubmit: SubmitFunction<Record<'message', string>> = async ({ formData, cancel }) => {
+		const progressbar = getProgressBar();
+
 		if (choices.length === 0) {
 			alert('Daftar pilihan masih kosong!');
 			cancel();
+		} else {
+			loading = true;
+			progressbar.start();
 		}
 
 		formData.append('daftar_pilihan', JSON.stringify(choices));
@@ -62,6 +68,9 @@
 			} else if (result.type === 'failure') {
 				alert(result.data?.message);
 			}
+
+			loading = false;
+			progressbar.complete();
 		};
 	};
 </script>
@@ -145,7 +154,7 @@
 					/>
 				</div>
 			{/if}
-			<button type="submit" class="g-button">Submit</button>
+			<button disabled={loading} type="submit" class="g-button disabled:loading">Submit</button>
 		</div>
 	</form>
 </div>
