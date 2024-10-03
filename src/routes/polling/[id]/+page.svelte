@@ -73,6 +73,10 @@
 		navigator.share({ title: `(polling) ${data.nama}`, text: data.pertanyaan, url: document.URL });
 </script>
 
+<svelte:head>
+	<title>Pilihanku - Polling {data.nama}</title>
+</svelte:head>
+
 <div class="flex flex-col lg:flex-row bg-gray-100">
 	<section
 		class="flex-grow-2! transition-transform-500"
