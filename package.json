@@ -27,7 +27,9 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-cloudflare": "^4.7.2",
-		"pocketbase": "^0.21.5"
+		"@prgm/sveltekit-progress-bar": "^2.0.0",
+		"chartjs": "^0.3.24",
+		"pocketbase": "^0.21.5",
+		"svelte-chartjs": "^3.1.5"
 	}
 }

@@ -1,7 +1,7 @@
-import type { PageServerLoad } from './$types';
+import type { LayoutServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ request, setHeaders, locals }) => {
+export const load: LayoutServerLoad = async ({ request, setHeaders, locals }) => {
 	const auth = request.headers.get('Authorization');
 	if (auth !== null) {
 		const decoded = atob(auth.split(' ')[1]);
@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ request, setHeaders, locals }) => {
 		try {
 			await locals.pb.collection('users').authWithPassword(username, password);
 
-			return { value: { username, password } };
+			return { username, password };
 		} catch (e) {
 			// invalid auth
 		}
