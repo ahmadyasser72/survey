@@ -9,10 +9,10 @@
 
 <a href="/polling/{route}" class="bg-white border border-gray-8 rounded-xl">
 	<div class="flex flex-col gap-1 divide-y divide-dashed divide-gray-6 py-2 children:px-2">
-		<p class="text-xl text-gray-9 font-bold pb-2">{title}</p>
-		<p class="text-lg text-gray-9">{description}</p>
+		<p class="md:text-xl text-gray-9 font-bold pb-1 md:pb-2">{title}</p>
+		<p class="text-sm md:text-base text-gray-9">{description}</p>
 		{#if time_limit_date !== undefined}
-			<p class="text-end text-gray-7">
+			<p class="text-xs md:text-sm text-end text-gray-7 pt-1 md:pt-0">
 				{#if active}
 					Polling akan ditutup <span
 						class="underline underline-dotted text-gray-9"
