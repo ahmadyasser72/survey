@@ -81,6 +81,20 @@
 	>
 		<h1 bind:this={topHeading}>{data.nama}</h1>
 
+		{#if data.batas_waktu_date !== undefined}
+			<p class="text-sm -mt-4 mb-2">
+				{#if data.active}
+					Batas waktu polling: <span
+						title={data.batas_waktu_relative}
+						class="font-semibold underline underline-dotted"
+						>{data.batas_waktu_date.toISOString().replace('T', ' ').split('.')[0]}</span
+					>
+				{:else}
+					<span class="text-xl text-red-5 font-bold">Polling ini sudah ditutup</span>
+				{/if}
+			</p>
+		{/if}
+
 		<div class="bg-white rounded-lg shadow-lg w-80% md:w-136 p-4 mb-8">
 			<p>{data.pertanyaan}</p>
 		</div>

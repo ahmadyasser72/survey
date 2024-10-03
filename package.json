@@ -29,6 +29,7 @@
 	"dependencies": {
 		"@prgm/sveltekit-progress-bar": "^2.0.0",
 		"chartjs": "^0.3.24",
+		"date-fns": "^4.1.0",
 		"pocketbase": "^0.21.5",
 		"svelte-chartjs": "^3.1.5"
 	}

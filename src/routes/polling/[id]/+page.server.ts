@@ -1,12 +1,19 @@
 import { ClientResponseError } from 'pocketbase';
 import type { Actions, PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { isPollActive } from '$lib';
+import { formatBatasWaktu, isPollActive } from '$lib';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	try {
 		const record = await getPoll(locals, params.id);
-		const { id: pollId, nama, pertanyaan, daftar_pilihan, daftar_gambar_pilihan } = record;
+		const {
+			id: pollId,
+			nama,
+			pertanyaan,
+			daftar_pilihan,
+			daftar_gambar_pilihan,
+			batas_waktu
+		} = record;
 		const hasil = await getPollResult(locals, pollId);
 		const active = isPollActive(record);
 
@@ -20,7 +27,8 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 					value,
 					locals.pb.files.getUrl(record, daftar_gambar_pilihan[idx])
 				])
-			)
+			),
+			...formatBatasWaktu(batas_waktu)
 		};
 	} catch (err) {
 		if (err instanceof ClientResponseError && err.status === 404) {

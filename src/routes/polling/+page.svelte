@@ -11,8 +11,8 @@
 		<h1 class="text-center text-3xl font-bold mb-8 pt-6">Daftar Polling</h1>
 	</div>
 	<div class="py-4 grid md:grid-cols-2 gap-4">
-		{#each data.value as { title, description, route }}
-			<PollingCard {title} {description} {route} />
+		{#each data.values as { active, title, description, route, time_limit_relative, time_limit_date }}
+			<PollingCard {active} {title} {description} {route} {time_limit_relative} {time_limit_date} />
 		{/each}
 	</div>
 </div>
