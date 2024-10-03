@@ -20,6 +20,9 @@
 {#if total === 0}
 	<p class="text-lg font-bold">Data polling kosong</p>
 {:else}
-	<Pie data={{ labels, datasets: [{ data: Object.values(data) }] }} />
+	<Pie
+		data={{ labels, datasets: [{ data: Object.values(data) }] }}
+		options={{ plugins: { legend: { align: 'start' } } }}
+	/>
 	<p class="mt-2 md:mt-4 font-bold">Total: {total} suara</p>
 {/if}
