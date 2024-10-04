@@ -1,10 +1,11 @@
 <script lang="ts">
-	import PollingImageChoice from './PollingImageChoice.svelte';
+	import PilihanPolling, { type Choice } from './PilihanPolling.svelte';
 
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { getProgressBar } from '$lib/stores';
 	import type { Poll } from '$lib/types';
+	import { NO_IMAGE_INPUT_PLACEHOLDER } from '$lib/constants';
 
 	export let mode: 'create' | 'update';
 	export let prefilled: Poll & { id?: string } = {
@@ -16,26 +17,13 @@
 		daftar_gambar_pilihan: []
 	};
 
-	const fixDateTime = (date: Date) =>
+	const formatDateTime = (date: Date) =>
 		date.toLocaleString('sv-SE').replace(' ', 'T').split(':').slice(0, 2).join(':');
 
-	let images: File[] = [];
-	let imageSrcs: string[] = prefilled.daftar_gambar_pilihan;
-	let choices: string[] = prefilled.daftar_pilihan;
-	let imageInput: HTMLInputElement;
-	const addChoice = () => {
-		const files = imageInput.files ?? undefined;
-		if (files !== undefined) {
-			for (const image of files) {
-				choices.push('');
-				images.push(image);
-				imageSrcs.push(URL.createObjectURL(image));
-				imageSrcs = imageSrcs;
-			}
-		}
-
-		imageInput.value = '';
-	};
+	let choices: Choice[] = prefilled.daftar_pilihan.map((text, idx) => ({
+		src: prefilled.daftar_gambar_pilihan[idx],
+		text
+	}));
 
 	let loading = false;
 	const handleSubmit: SubmitFunction<Record<'message', string>> = async ({ formData, cancel }) => {
@@ -49,9 +37,15 @@
 			progressbar.start();
 		}
 
-		formData.append('daftar_pilihan', JSON.stringify(choices));
-		if (mode === 'create')
-			for (const image of images) formData.append('daftar_gambar_pilihan', image);
+		for (const name of formData.keys()) {
+			if (name.startsWith('tmp')) formData.delete(name);
+		}
+
+		formData.append('daftar_pilihan', JSON.stringify(choices.map(({ text }) => text)));
+		if (mode === 'create') {
+			for (const { file } of choices)
+				formData.append('daftar_gambar_pilihan', file ?? NO_IMAGE_INPUT_PLACEHOLDER);
+		}
 
 		const batasWaktu = formData.get('batas_waktu');
 		if (typeof batasWaktu === 'string' && batasWaktu !== '')
@@ -61,7 +55,7 @@
 			if (result.type === 'success') {
 				update({ reset: mode === 'create' });
 				if (mode === 'create') {
-					images.length = imageSrcs.length = choices.length = 0;
+					choices = [];
 				}
 
 				alert(result.data?.message);
@@ -86,6 +80,7 @@
 		{#if mode === 'update'}
 			<input type="hidden" name="id" value={prefilled.id} />
 		{/if}
+
 		<div class="flex flex-col space-y-4 border rounded-lg px-8 py-6">
 			<div class="flex flex-col">
 				<label for="nama">Nama Polling</label>
@@ -117,8 +112,8 @@
 				<input
 					class="border rounded-sm mt-1 px-2 py-1"
 					type="datetime-local"
-					min={fixDateTime(new Date())}
-					value={fixDateTime(new Date(prefilled.batas_waktu))}
+					min={formatDateTime(new Date())}
+					value={formatDateTime(new Date(prefilled.batas_waktu))}
 					name="batas_waktu"
 					id="batas_waktu"
 				/>
@@ -129,32 +124,31 @@
 					>{prefilled.pertanyaan}</textarea
 				>
 			</div>
-			{#each imageSrcs as src, idx}
-				<PollingImageChoice id={(idx + 1).toString()} {src} bind:text={choices[idx]} />
+
+			{#each choices as _, idx}
+				<PilihanPolling
+					on:delete={() => (choices = [...choices.slice(0, idx), ...choices.slice(idx + 1)])}
+					idx={idx + 1}
+					bind:src={choices[idx].src}
+					bind:text={choices[idx].text}
+					bind:file={choices[idx].file}
+					allowEditingImage={mode === 'create'}
+				/>
 			{/each}
+
 			{#if mode === 'create'}
-				<div>
-					<label
-						class="flex items-center justify-center space-x-1 border-2 border-dashed font-semibold h-16 cursor-pointer"
-						for="gambar"
-					>
-						<span class="text-4xl -translate-y-1">+</span>
-						<span>Tambah pilihan</span>
-					</label>
-					<input
-						bind:this={imageInput}
-						on:change={addChoice}
-						disabled={imageSrcs.length >= 3}
-						class="opacity-0 h-0"
-						type="file"
-						name="gambar"
-						id="gambar"
-						accept="image/*"
-						multiple
-					/>
-				</div>
+				<button
+					on:click|preventDefault={() => (choices = [...choices, {}])}
+					class="flex items-center justify-center space-x-1 border-2 border-dashed font-semibold h-16 cursor-pointer"
+				>
+					<span class="text-4xl -translate-y-1">+</span>
+					<span>Tambah pilihan</span>
+				</button>
 			{/if}
-			<button disabled={loading} type="submit" class="g-button disabled:loading">Submit</button>
+
+			<button disabled={loading} type="submit" class="g-button disabled:loading"
+				>{mode === 'create' ? 'Buat' : 'Update'} polling</button
+			>
 		</div>
 	</form>
 </div>

@@ -2,6 +2,7 @@ import { ClientResponseError } from 'pocketbase';
 import type { Actions, PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
 import { formatBatasWaktu, isPollActive } from '$lib';
+import { NO_IMAGE_FILENAME } from '$lib/constants';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	try {
@@ -23,9 +24,9 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 			nama,
 			pertanyaan,
 			pilihan: Object.fromEntries(
-				daftar_pilihan.map((value, idx) => [
-					value,
-					locals.pb.files.getUrl(record, daftar_gambar_pilihan[idx])
+				daftar_gambar_pilihan.map((value, idx) => [
+					daftar_pilihan[idx],
+					value.startsWith(NO_IMAGE_FILENAME) ? undefined : locals.pb.files.getUrl(record, value)
 				])
 			),
 			...formatBatasWaktu(batas_waktu)

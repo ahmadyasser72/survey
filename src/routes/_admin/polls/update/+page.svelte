@@ -1,8 +1,8 @@
 <script lang="ts">
-	import DefaultForm from '../DefaultForm.svelte';
+	import BaseForm from '../BaseForm.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 </script>
 
-<DefaultForm mode="update" prefilled={data} />
+<BaseForm mode="update" prefilled={data} />

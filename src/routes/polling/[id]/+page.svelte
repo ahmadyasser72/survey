@@ -110,8 +110,8 @@
 			use:enhance={handleSubmit}
 		>
 			<div class:pointer-events-none={!data.active} class="flex flex-wrap justify-center gap-6">
-				{#each Object.entries(data.pilihan) as [text, imageSource], idx}
-					<PilihanPolling id={idx.toString()} {imageSource} {text} />
+				{#each Object.entries(data.pilihan) as [text, src], idx}
+					<PilihanPolling id={idx.toString()} {src} {text} />
 				{/each}
 			</div>
 			<div class="relative mt-6 w-full md:w-60ch flex flex-col justify-center">

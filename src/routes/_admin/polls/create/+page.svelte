@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DefaultForm from '../DefaultForm.svelte';
+	import BaseForm from '../BaseForm.svelte';
 </script>
 
-<DefaultForm mode="create" />
+<BaseForm mode="create" />

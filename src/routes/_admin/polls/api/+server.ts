@@ -1,9 +1,22 @@
 import { ClientResponseError } from 'pocketbase';
 import type { RequestHandler } from './$types';
 import { error, json } from '@sveltejs/kit';
+import { NO_IMAGE_FILENAME, NO_IMAGE_INPUT_PLACEHOLDER } from '$lib/constants';
 
 export const POST: RequestHandler = async ({ request, url, locals }) => {
 	const formData = await request.formData();
+
+	const placeholderImage = await fetch('https://placehold.co/1')
+		.then((response) => response.blob())
+		.then((blob) => new File([blob], NO_IMAGE_FILENAME));
+	const images = formData.getAll('daftar_gambar_pilihan');
+	formData.delete('daftar_gambar_pilihan');
+	for (const maybeImage of images)
+		formData.append(
+			'daftar_gambar_pilihan',
+			maybeImage === NO_IMAGE_INPUT_PLACEHOLDER ? placeholderImage : maybeImage
+		);
+
 	const mode = url.searchParams.get('mode');
 	switch (mode) {
 		case 'create':
