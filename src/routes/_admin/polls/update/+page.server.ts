@@ -12,8 +12,15 @@ export const load: PageServerLoad = async ({
 	if (id == null) error(404);
 
 	const record = await polling.getOne(id);
-	const { nama, nama_route, pertanyaan, batas_waktu, daftar_pilihan, daftar_gambar_pilihan } =
-		record;
+	const {
+		nama,
+		nama_route,
+		pertanyaan,
+		gambar_banner,
+		batas_waktu,
+		daftar_pilihan,
+		daftar_gambar_pilihan
+	} = record;
 
 	return {
 		id,
@@ -22,7 +29,8 @@ export const load: PageServerLoad = async ({
 		pertanyaan,
 		batas_waktu,
 		daftar_pilihan,
-		daftar_gambar_pilihan: daftar_gambar_pilihan.map((value) => pb.files.getUrl(record, value))
+		daftar_gambar_pilihan: daftar_gambar_pilihan.map((value) => pb.files.getUrl(record, value)),
+		gambar_banner: pb.files.getUrl(record, gambar_banner)
 	};
 };
 

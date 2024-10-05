@@ -2,6 +2,7 @@ export interface Poll {
 	nama: string;
 	nama_route: string;
 	pertanyaan: string;
+	gambar_banner: string;
 	daftar_pilihan: string[];
 	daftar_gambar_pilihan: string[];
 	batas_waktu: string;

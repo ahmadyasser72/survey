@@ -1,4 +1,5 @@
 <script lang="ts">
+	import EditableImage from './EditableImage.svelte';
 	import PilihanPolling, { type Choice } from './PilihanPolling.svelte';
 
 	import { enhance } from '$app/forms';
@@ -12,18 +13,19 @@
 		nama: '',
 		nama_route: '',
 		pertanyaan: '',
+		gambar_banner: '',
 		batas_waktu: '',
 		daftar_pilihan: [],
 		daftar_gambar_pilihan: []
 	};
 
-	const formatDateTime = (date: Date) =>
-		date.toLocaleString('sv-SE').replace(' ', 'T').split(':').slice(0, 2).join(':');
-
 	let choices: Choice[] = prefilled.daftar_pilihan.map((text, idx) => ({
 		src: prefilled.daftar_gambar_pilihan[idx],
 		text
 	}));
+
+	const formatDateTime = (date: Date) =>
+		date.toLocaleString('sv-SE').replace(' ', 'T').split(':').slice(0, 2).join(':');
 
 	let loading = false;
 	const handleSubmit: SubmitFunction<Record<'message', string>> = async ({ formData, cancel }) => {
@@ -80,6 +82,11 @@
 		{#if mode === 'update'}
 			<input type="hidden" name="id" value={prefilled.id} />
 		{/if}
+
+		<div class="flex flex-col items-center border rounded-lg px-5.5 py-6 mb-2">
+			<span>Gambar banner</span>
+			<EditableImage id="gambar_banner" allowEditingImage={true} src={prefilled.gambar_banner} />
+		</div>
 
 		<div class="flex flex-col space-y-4 border rounded-lg px-8 py-6">
 			<div class="flex flex-col">

@@ -11,6 +11,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 			id: pollId,
 			nama,
 			pertanyaan,
+			gambar_banner,
 			daftar_pilihan,
 			daftar_gambar_pilihan,
 			batas_waktu
@@ -20,6 +21,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 		return {
 			active,
+			banner: gambar_banner !== '' ? locals.pb.files.getUrl(record, gambar_banner) : undefined,
 			hasil,
 			nama,
 			pertanyaan,

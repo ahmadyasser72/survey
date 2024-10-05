@@ -99,6 +99,14 @@
 			</p>
 		{/if}
 
+		{#if data.banner !== undefined}
+			<img
+				src={data.banner}
+				alt="Banner polling {data.nama}"
+				class="h-64 w-80% md:w-136 object-cover rounded-md mb-4"
+			/>
+		{/if}
+
 		<div class="bg-white rounded-lg shadow-lg w-80% md:w-136 p-4 mb-8">
 			<p>{data.pertanyaan}</p>
 		</div>
