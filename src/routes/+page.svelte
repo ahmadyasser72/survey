@@ -1,12 +1,12 @@
 <script lang="ts">
+	import MetaTags from '$lib/components/MetaTags.svelte';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 </script>
 
-<svelte:head>
-	<title>Pilihanku</title>
-</svelte:head>
+<MetaTags meta={{ title: 'Pilihanku' }} />
 
 <section
 	id="hadding"

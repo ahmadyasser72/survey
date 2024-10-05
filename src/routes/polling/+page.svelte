@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MetaTags from '$lib/components/MetaTags.svelte';
 	import PollingCard from './PollingCard.svelte';
 
 	import type { PageData } from './$types';
@@ -6,9 +7,7 @@
 	export let data: PageData;
 </script>
 
-<svelte:head>
-	<title>Pilihanku - Daftar Polling</title>
-</svelte:head>
+<MetaTags meta={{ title: 'Pilihanku - Daftar Polling' }} />
 
 <div class="mx-auto w-80% md:w-full py-4 md:px-8 lg:px-32">
 	<div class="text-center justify-center p-4">

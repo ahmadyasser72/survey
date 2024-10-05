@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ChartHasilPolling from './ChartHasilPolling.svelte';
+	import MetaTags from '$lib/components/MetaTags.svelte';
 	import PilihanPolling from './PilihanPolling.svelte';
 
 	import { applyAction, enhance } from '$app/forms';
@@ -73,9 +74,13 @@
 		navigator.share({ title: `(polling) ${data.nama}`, text: data.pertanyaan, url: document.URL });
 </script>
 
-<svelte:head>
-	<title>Pilihanku - Polling {data.nama}</title>
-</svelte:head>
+<MetaTags
+	meta={{
+		title: `Pilihanku - Polling ${data.nama}`,
+		description: data.pertanyaan,
+		image: data.banner
+	}}
+/>
 
 <div class="flex flex-col lg:flex-row bg-gray-100">
 	<section
