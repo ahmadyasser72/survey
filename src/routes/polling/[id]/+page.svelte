@@ -78,7 +78,7 @@
 	meta={{
 		title: `Pilihanku - Polling ${data.nama}`,
 		description: data.pertanyaan,
-		image: data.banner
+		image: data.banner_thumbnail
 	}}
 />
 

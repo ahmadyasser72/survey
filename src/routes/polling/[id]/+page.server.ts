@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 import { formatBatasWaktu, isPollActive } from '$lib';
 import { NO_IMAGE_FILENAME } from '$lib/constants';
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export const load: PageServerLoad = async ({ params, url, locals }) => {
 	try {
 		const record = await getPoll(locals, params.id);
 		const {
@@ -19,9 +19,18 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		const hasil = await getPollResult(locals, pollId);
 		const active = isPollActive(record);
 
+		const [banner, banner_thumbnail] =
+			gambar_banner !== ''
+				? [
+						locals.pb.files.getUrl(record, gambar_banner),
+						locals.pb.files.getUrl(record, gambar_banner, { thumb: '480x0' })
+					]
+				: [undefined, undefined];
+
 		return {
 			active,
-			banner: gambar_banner !== '' ? locals.pb.files.getUrl(record, gambar_banner) : undefined,
+			banner,
+			banner_thumbnail,
 			hasil,
 			nama,
 			pertanyaan,
