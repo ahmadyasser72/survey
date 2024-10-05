@@ -6,17 +6,18 @@
 	export let file: File | undefined = undefined;
 	export let allowEditingImage: boolean;
 
+	$: noImage = src === undefined || src === '';
+
 	const handleImageInputChange: ChangeEventHandler<HTMLInputElement> = ({ currentTarget }) => {
 		file = currentTarget.files?.[0];
 		if (file instanceof File) src = URL.createObjectURL(file);
 	};
 </script>
 
-<div class="relative w-72 {src !== undefined ? 'h-64' : 'h-32'}">
+<div class="relative w-72 {noImage ? 'h-32' : 'h-64'}">
 	<img
-		data-test={src}
 		class="w-full h-full object-cover"
-		src={src ?? 'https://placehold.co/100?text=no+image'}
+		src={noImage ? 'https://placehold.co/100?text=no+image' : src}
 		alt="{id} image preview"
 	/>
 	<div
@@ -27,11 +28,11 @@
 			class="bg-black/80 text-white flex items-center justify-center space-x-1 font-semibold cursor-pointer px-4 py-2"
 			for={id}
 		>
-			{#if src !== undefined}
-				<span>Ubah gambar</span>
-			{:else}
+			{#if noImage}
 				<span class="text-4xl -translate-y-1">+</span>
 				<span>Tambah gambar </span>
+			{:else}
+				<span>Ubah gambar</span>
 			{/if}
 
 			<input
