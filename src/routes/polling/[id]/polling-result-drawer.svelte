@@ -41,7 +41,9 @@
 			<Drawer.Footer>
 				<div class="grid grid-cols-2 gap-1">
 					<LoadingButton on:click={() => refresh()} {loading}>Refresh</LoadingButton>
-					<Button on:click={() => navigator.share(data.share)}>Bagikan</Button>
+					<Button on:click={() => navigator.share({ ...data.share, url: document.URL })}
+						>Bagikan</Button
+					>
 					<Button href="/polling">Lihat polling lain</Button>
 
 					<Drawer.Close asChild let:builder>

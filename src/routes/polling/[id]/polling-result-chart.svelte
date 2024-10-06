@@ -16,7 +16,7 @@
 	$: labels = Object.keys(data).map((value, idx) => `(${idx + 1}) ${value}`);
 </script>
 
-<div class="md:h-88 flex justify-center">
+<div class="h-88 flex justify-center">
 	{#if Object.values(data).every((value) => value === 0)}
 		<p class="text-lg font-bold">Data polling kosong</p>
 	{:else}
