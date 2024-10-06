@@ -1,80 +1,65 @@
 <script lang="ts">
-	import ChartHasilPolling from './ChartHasilPolling.svelte';
-	import MetaTags from '$lib/components/MetaTags.svelte';
-	import PilihanPolling from './PilihanPolling.svelte';
+	import * as Card from '$lib/components/ui/card';
+	import { Separator } from '$lib/components/ui/separator';
+	import { Toaster } from '$lib/components/ui/sonner';
+
+	import PollingResultDrawer from './polling-result-drawer.svelte';
+	import PollingChoice from './polling-choice.svelte';
+	import LoadingButton from '$lib/components/loading-button.svelte';
+	import MetaHeadTags from '$lib/components/meta-head-tags.svelte';
 
 	import { applyAction, enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
-	import { getProgressBar } from '$lib/stores';
 	import type { PageData, SubmitFunction } from './$types';
 
-	import { onMount, tick } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
-	let topHeading: HTMLHeadingElement, hasilPollingHeading: HTMLHeadingElement;
 	let showResult = !data.active;
-	const toggleShowResult = async (value = !showResult) => {
-		showResult = value;
-		await tick();
-		(showResult ? hasilPollingHeading : topHeading).scrollIntoView({ behavior: 'smooth' });
-	};
-
 	let voteKey: string;
 	onMount(() => {
 		const url = new URL(document.URL);
 		voteKey = `vote-${url.pathname.split('/').at(-1)}`;
-
-		if (!data.active) tick().then(() => hasilPollingHeading.scrollIntoView({ behavior: 'smooth' }));
 	});
 
 	let loading = false;
 	const handleSubmit: SubmitFunction = async ({ cancel, formData }) => {
-		const progressbar = getProgressBar();
-
 		if (localStorage.getItem(voteKey) === '1') {
-			alert('Anda sudah pernah vote disini!');
+			toast.error('Anda sudah pernah vote disini :(');
 			cancel();
+			return;
 		} else if (formData.get('index_pilihan') == null) {
-			alert('Anda belum memilih pilihan!');
+			toast.error('Anda belum memilih apapun!');
 			cancel();
-		} else {
-			loading = true;
-			progressbar.start();
+			return;
 		}
 
+		loading = true;
+		const submitToast = toast.loading('Menunggu respon dari server...', {
+			duration: Number.POSITIVE_INFINITY
+		});
 		return async ({ result, update }) => {
-			if (result.type === 'success') {
+			if (result.type !== 'success') {
+				toast.error(`Error: ${result.status}`, { id: submitToast });
+			} else {
 				await applyAction(result);
 				await invalidateAll();
 				localStorage.setItem(voteKey, '1');
-				alert(`Voting untuk "${result.data?.pilihan}" berhasil!`);
 
+				toast.success(`Voting untuk "${result.data!.pilihan}" berhasil!`, { id: submitToast });
 				await update({ invalidateAll: false });
-				await toggleShowResult(true);
+				showResult = true;
 			}
 
 			loading = false;
-			progressbar.complete();
+			setTimeout(() => toast.dismiss(submitToast), 3000);
 		};
 	};
-
-	let loadingRefresh = false;
-	const refreshHasilPolling = async () => {
-		const progressbar = getProgressBar();
-		loadingRefresh = true;
-		progressbar.start();
-		await invalidateAll();
-		progressbar.complete();
-		loadingRefresh = false;
-	};
-
-	const sharePolling = () =>
-		navigator.share({ title: `(polling) ${data.nama}`, text: data.pertanyaan, url: document.URL });
 </script>
 
-<MetaTags
+<MetaHeadTags
 	meta={{
 		title: `Pilihanku - Polling ${data.nama}`,
 		description: data.pertanyaan,
@@ -82,112 +67,70 @@
 	}}
 />
 
-<div class="flex flex-col lg:flex-row bg-gray-100">
-	<section
-		class="flex-grow-2! transition-transform-500"
-		class:lg:translate-x-0={showResult}
-		class:lg:translate-x-25%={!showResult}
-	>
-		<h1 bind:this={topHeading}>{data.nama}</h1>
+<div class="flex flex-col items-center pb-4 md:pb-8">
+	<h1 class="text-center text-3xl font-bold mb-8 pt-6">{data.nama}</h1>
 
-		{#if data.batas_waktu_date !== undefined}
-			<p class="text-sm -mt-4 mb-2">
-				{#if data.active}
-					Batas waktu polling: <span
-						title={data.batas_waktu_relative}
-						class="font-semibold underline underline-dotted"
-						>{data.batas_waktu_date.toISOString().replace('T', ' ').split('.')[0]}</span
-					>
-				{:else}
-					<span class="text-xl text-red-5 font-bold">Polling ini sudah ditutup</span>
-				{/if}
-			</p>
-		{/if}
-
+	<Card.Root class="w-80% md:w-136 mb-8">
 		{#if data.banner !== undefined}
-			<img
-				src={data.banner}
-				alt="Banner polling {data.nama}"
-				class="h-64 w-80% md:w-136 object-cover rounded-md mb-4"
-			/>
+			<Card.Header>
+				<img
+					src={data.banner}
+					alt="Banner polling {data.nama}"
+					class="h-64 object-cover rounded-md"
+				/>
+			</Card.Header>
 		{/if}
 
-		<div class="bg-white rounded-lg shadow-lg w-80% md:w-136 p-4 mb-8">
-			<p>{data.pertanyaan}</p>
-		</div>
+		<Card.Content>
+			{data.pertanyaan}
+		</Card.Content>
 
-		<form
-			class="flex flex-col items-center w-80% md:min-w-60ch"
-			method="POST"
-			enctype="multipart/form-data"
-			use:enhance={handleSubmit}
-		>
-			<div class:pointer-events-none={!data.active} class="flex flex-wrap justify-center gap-6">
-				{#each Object.entries(data.pilihan) as [text, src], idx}
-					<PilihanPolling id={idx.toString()} {src} {text} />
-				{/each}
-			</div>
-			<div class="relative mt-6 w-full md:w-60ch flex flex-col justify-center">
-				{#if data.active}
-					<div class="flex justify-center">
-						<button
-							disabled={loading}
-							class="disabled:loading bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:bg-blue-700"
-						>
-							Vote
-						</button>
-					</div>
+		<Card.Footer>
+			<div class="w-full flex flex-col items-center">
+				{#if data.batas_waktu_date !== undefined}
+					<p class="text-sm">
+						{#if data.active}
+							Batas waktu polling: <span
+								title={data.batas_waktu_relative}
+								class="font-semibold underline underline-dotted"
+								>{data.batas_waktu_date.toISOString().replace('T', ' ').split('.')[0]}</span
+							>
+						{:else}
+							<span class="text-xl text-red-5 font-bold">Polling ini sudah ditutup</span>
+						{/if}
+					</p>
+
+					<Separator class="my-2" />
 				{/if}
-				<button
-					on:click|preventDefault={() => toggleShowResult()}
-					class="md:absolute mt-1 md:mt-0 right-0 bottom-0 hover:text-[#333] underline"
-					>{showResult ? 'sembunyikan' : 'tampilkan'} hasil</button
-				>
-			</div>
-		</form>
-	</section>
 
-	{#if !showResult}
-		<section></section>
-	{:else}
-		<section class="-lg:translate-x-20%" in:fade={{ delay: 200 }}>
-			<h2 bind:this={hasilPollingHeading}>Hasil polling</h2>
-
-			<div
-				class="flex flex-col items-center bg-white rounded-lg shadow-lg overflow-hidden w-80% md:w-40ch px-8 py-6"
-			>
-				<ChartHasilPolling data={data.hasil} />
+				<PollingResultDrawer
+					bind:open={showResult}
+					data={{
+						polling: data.hasil,
+						share: { title: `(polling) ${data.nama}`, text: data.pertanyaan }
+					}}
+				/>
 			</div>
+		</Card.Footer>
+	</Card.Root>
 
-			<div class="flex flex-col md:flex-row gap-2 mt-6">
-				<button
-					disabled={loadingRefresh}
-					on:click={refreshHasilPolling}
-					class="disabled:loading bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-700 disabled:bg-cyan-700"
-				>
-					Refresh
-				</button>
-				<a href="/polling" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
-					Lihat polling lain
-				</a>
-				<button
-					on:click={sharePolling}
-					class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-				>
-					Bagikan
-				</button>
-			</div>
-		</section>
-	{/if}
+	<form
+		class="flex flex-col items-center w-80% md:(w-full min-w-60ch)"
+		method="POST"
+		enctype="multipart/form-data"
+		use:enhance={handleSubmit}
+	>
+		<div class:pointer-events-none={!data.active} class="flex flex-wrap justify-center gap-6">
+			{#each Object.entries(data.pilihan) as [text, src], idx}
+				<PollingChoice id={idx.toString()} {src} {text} />
+			{/each}
+		</div>
+		{#if data.active}
+			<LoadingButton {loading} type="submit" class="mt-8 mx-auto w-24 font-semibold">
+				Vote
+			</LoadingButton>
+		{/if}
+	</form>
+
+	<Toaster richColors theme="light" />
 </div>
-
-<style scoped>
-	section {
-		--at-apply: flex-1 flex flex-col items-center pb-4 'md:pb-8';
-	}
-
-	section > h1,
-	h2 {
-		--at-apply: text-center text-3xl font-bold mb-8 pt-6;
-	}
-</style>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import 'virtual:uno.css';
 	import '@unocss/reset/tailwind.css';
+	import 'virtual:uno.css';
 
 	import { setProgressBar } from '$lib/stores';
 
