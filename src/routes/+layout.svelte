@@ -2,6 +2,8 @@
 	import '@unocss/reset/tailwind.css';
 	import 'virtual:uno.css';
 
+	import { afterNavigate } from '$app/navigation';
+
 	import { setProgressBar } from '$lib/stores';
 
 	import { ProgressBar } from '@prgm/sveltekit-progress-bar';
@@ -14,6 +16,7 @@
 
 	let showMobileMenu = false;
 	$: mobileMenuClasses = showMobileMenu ? 'max-h-64' : 'max-h-0 <md:-translate-x-100%';
+	afterNavigate(() => (showMobileMenu = false));
 </script>
 
 <ProgressBar bind:this={progressbar} class="text-gradient" />
